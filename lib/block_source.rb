@@ -3,7 +3,6 @@ require 'ripper'
 require 'plock'
 
 module BlockSource
-
   class Parser < Ripper::Filter
     def on_default event, token, data
       p { [token, event] }
@@ -11,6 +10,14 @@ module BlockSource
     end
   end
 
+  class << self
+    def block_source proc_obj
+      path, line_num = proc_obj.source_location
+      File.open( path ) do|f|
+        extract_from_io f, line_num
+      end
+    end
+  end
 end
 
 if __FILE__ == $PROGRAM_NAME
