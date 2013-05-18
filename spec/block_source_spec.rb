@@ -10,4 +10,21 @@ describe BlockSource do
       it { should eq 'do puts "hello, world" end' }
     end
   end
+
+  describe described_class::Parser do
+    let( :described_instance ) { described_class.new target_string }
+    describe '#parse' do
+      let( :target_string ){
+        %Q{
+          a = 1
+          b = proc do
+            puts a
+          end
+          b.call
+        }
+      }
+      subject { described_instance.parse }
+      it { should eq expected_source_code }
+    end
+  end
 end
