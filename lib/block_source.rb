@@ -14,7 +14,6 @@ module BlockSource
     def block_source proc_obj
       path, line_num = proc_obj.source_location
       File.open( path ) do|f|
-        extract_from_io f, line_num
       end
     end
   end
