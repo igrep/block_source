@@ -1,3 +1,5 @@
+require 'block_source'
+
 describe BlockSource do
   context 'when processing the only do-end block in a line' do
     subject do # here must be newline so far!
