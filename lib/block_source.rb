@@ -15,6 +15,7 @@ module BlockSource
     def block_source proc_obj
       path, line_num = proc_obj.source_location
       File.open( path ) do|f|
+        self::Parser.new( f, f.path, line_num ).parse ''
       end
     end
   end
