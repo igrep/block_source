@@ -9,6 +9,10 @@ module BlockSource
       p { [token, event] }
       data << token
     end
+
+    def parse
+      super ''
+    end
   end
 
   class << self
