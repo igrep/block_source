@@ -11,6 +11,14 @@ module BlockSource
     def parse
       super ''
     end
+
+    class State
+      attr_accessor :block_source, :in_do
+      def initialize block_source = '', in_do = false
+        @block_source = block_source
+        @in_do = in_do
+      end
+    end
   end
 
   class << self
