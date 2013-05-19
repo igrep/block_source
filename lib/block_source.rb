@@ -1,5 +1,5 @@
 require "block_source/version"
-require 'ripper'
+require 'ripper/filter'
 require 'plock'
 
 module BlockSource
