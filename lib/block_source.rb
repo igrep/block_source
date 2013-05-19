@@ -4,9 +4,6 @@ require 'plock'
 
 module BlockSource
   class Parser < Ripper::Filter
-    def on_default event, token, data
-      data << token
-    end
 
     def parse
       super ''
