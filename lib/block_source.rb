@@ -19,13 +19,19 @@ module BlockSource
         @in_do = in_do
       end
     end
+
+    class << self
+      def parse io_or_string, path, line_num
+        self.new( io_or_string, path, line_num ).parse
+      end
+    end
   end
 
   class << self
     def block_source proc_obj
       path, line_num = proc_obj.source_location
       File.open( path ) do|f|
-        self::Parser.new( f, f.path, line_num ).parse ''
+        self::Parser.parse( f, f.path, line_num )
       end
     end
   end
