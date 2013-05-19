@@ -6,10 +6,11 @@ module BlockSource
   class Parser < Ripper::Filter
 
     def on_kw ruby_keyword, state
+      state
     end
 
-    def parse
-      super ''
+    def parse # override to hide the argument
+      super State.new
     end
 
     class State
