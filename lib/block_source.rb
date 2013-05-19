@@ -5,6 +5,9 @@ require 'plock'
 module BlockSource
   class Parser < Ripper::Filter
 
+    def on_kw ruby_keyword, state
+    end
+
     def parse
       super ''
     end
