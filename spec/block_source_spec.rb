@@ -12,19 +12,22 @@ describe BlockSource do
   end
 
   describe described_class::Parser do
-    let( :described_instance ) { described_class.new target_string }
+    let( :described_instance ) { described_class::Parser.new target_string }
     describe '#parse' do
-      let( :target_string ){
-        %Q{
-          a = 1
-          b = proc do
-            puts a
-          end
-          b.call
+      context 'when processing the only do-end block in a line' do
+        let( :target_string ){
+          %Q{
+            a = 1
+            b = #{expected_source_code}
+            b.call
+          }
         }
-      }
-      subject { described_instance.parse }
-      it { should eq expected_source_code }
+        let( :expected_source_code ){
+          'proc do puts a end'
+        }
+        subject { described_instance.parse }
+        it { should eq expected_source_code }
+      end
     end
   end
 end
