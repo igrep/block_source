@@ -18,12 +18,12 @@ describe BlockSource do
         let( :target_string ){
           %Q{
             a = 1
-            b = #{expected_source_code}
+            b = lambda #{expected_source_code}
             b.call
           }
         }
         let( :expected_source_code ){
-          'proc do puts a end'
+          'do puts a end'
         }
         subject { described_instance.parse }
         it { should eq expected_source_code }
