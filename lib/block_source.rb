@@ -5,19 +5,33 @@ require 'plock'
 module BlockSource
   class Parser < Ripper::Filter
 
-    def on_kw ruby_keyword, state
-      state
+    TOKEN_BEGINNING_CODE_BLOCK = %w/do/.freeze
+    TOKEN_CLOSING_CODE_BLOCK = %w/end/.freeze
+
+    def on_default _event, token, s
+      case token
+      when *TOKEN_BEGINNING_CODE_BLOCK
+        s.block_source << token
+        s.surrounding_blocks.push token
+      when *TOKEN_CLOSING_CODE_BLOCK
+        s.block_source << token
+        s.surrounding_blocks.pop
+      else
+        s.block_source << token unless s.surrounding_blocks.empty?
+      end
+      s
     end
 
     def parse # override to hide the argument
-      super State.new
+      state_after_parsed = super( State.new )
+      state_after_parsed.block_source
     end
 
     class State
-      attr_accessor :block_source, :in_do
-      def initialize block_source = '', in_do = false
+      attr_accessor :block_source, :surrounding_blocks
+      def initialize block_source = '', surrounding_blocks = []
         @block_source = block_source
-        @in_do = in_do
+        @surrounding_blocks = surrounding_blocks
       end
     end
 
