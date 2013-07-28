@@ -19,6 +19,7 @@ describe BlockSource do
           %Q{
             a = 1
             b = lambda #{expected_source_code}
+            c = proc do p b end
             b.call
           }
         }
