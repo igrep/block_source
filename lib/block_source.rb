@@ -9,6 +9,9 @@ module BlockSource
     TOKEN_BEGINNING_CODE_BLOCK = %w/do/.freeze
     TOKEN_CLOSING_CODE_BLOCK = %w/end/.freeze
 
+    END_OF_TARGET_BLOCK = Object.new
+
+    private
     def on_default _event, token, s
       case token
       when *TOKEN_BEGINNING_CODE_BLOCK
@@ -17,14 +20,16 @@ module BlockSource
       when *TOKEN_CLOSING_CODE_BLOCK
         s.block_source << token
         s.surrounding_blocks.pop
+        throw END_OF_TARGET_BLOCK, s if s.surrounding_blocks.empty?
       else
         s.block_source << token unless s.surrounding_blocks.empty?
       end
       s
     end
 
+    public
     def parse # override to hide the argument
-      state_after_parsed = super( State.new )
+      state_after_parsed = catch( END_OF_TARGET_BLOCK ) { super( State.new ) }
       state_after_parsed.block_source
     end
 
