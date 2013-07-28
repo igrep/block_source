@@ -1,5 +1,6 @@
 require "block_source/version"
 require 'ripper/filter'
+require 'stringio'
 require 'plock'
 
 module BlockSource
@@ -37,7 +38,13 @@ module BlockSource
 
     class << self
       def parse io_or_string, path, line_num
-        self.new( io_or_string, path, line_num ).parse
+        io = io_or_string.is_a?( String ) ? StringIO.new( io_or_string ) : io_or_string
+        skip_lines_until io, line_num
+        self.new( io, path, line_num ).parse
+      end
+
+      def skip_lines_until io, line_num
+        ( line_num - 1 ).times { io.readline }
       end
     end
   end
